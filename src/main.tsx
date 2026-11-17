@@ -31,7 +31,7 @@ function Home() {
         <h1>Hey, I’m<br />Gunnar<span className="accent">.</span></h1>
         <p className="intro">I’m a computer science student at Arizona State Univeristy. I like building software, working on hands-on projects, and finding new things to learn.</p>
         <p>Outside of software development, I like to spend time bouldering, traveling, and practicing the drums.</p>
-        <div className="actions"><ArrowLink to="/about" primary>Get to know me</ArrowLink><ArrowLink to="/projects">See my projects</ArrowLink></div>
+        <div className="actions"><ArrowLink to="/about" primary>Get to know me</ArrowLink><ArrowLink to="/projects">See my projects</ArrowLink><a className="text-link" href="/gunnar-wise-resume.pdf" target="_blank" rel="noopener noreferrer">View my resume<span aria-hidden="true">›</span></a></div>
       </div>
       <Photo src="portrait" alt="Gunnar Wise crouching on a steel railway bridge" className="hero-photo" eager />
     </section>
@@ -83,6 +83,10 @@ function About() {
         <p>Outside of school and programming, I enjoy staying active, trying new things, and finding new hobbies to get into. Whether it's bouldering, photography, drumming, or getting outdoors, I like having a variety of interests that keep life interesting. I'm always looking for something new to learn or experience.</p>
         <p>If you'd like to know a little more about what I enjoy outside of technology, check out my Life & Interests page.</p>
         <ArrowLink to="/life">Life & Interests</ArrowLink>
+      </div>
+      <div className="about-outdoor-photos">
+        <Photo src="about-pine-forest" alt="Gunnar walking through a sunny clearing in a pine forest" />
+        <Photo src="about-creek" alt="Four people sitting on a fallen log above a rocky swimming hole" />
       </div>
     </section>
   </article>
