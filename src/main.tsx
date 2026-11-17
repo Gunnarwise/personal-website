@@ -426,14 +426,68 @@ const pages: Record<string, { title: string; view: () => React.JSX.Element }> = 
 const page = pages[pathname]
 document.title = pathname === '/' ? 'Gunnar Wise' : `${page?.title ?? project?.title ?? 'Page not found'} | Gunnar Wise`
 
+function SiteHeader() {
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    const threshold = 8
+    let previousY = 0
+    let frame: number | null = null
+
+    function scrollPosition() {
+      const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
+      return Math.min(max, Math.max(0, window.scrollY))
+    }
+
+    function updateVisibility() {
+      frame = null
+      const y = scrollPosition()
+      if (y <= threshold) {
+        previousY = y
+        setHidden(false)
+      } else if (Math.abs(y - previousY) >= threshold) {
+        setHidden(y > previousY)
+        previousY = y
+      }
+    }
+
+    function handleScroll() {
+      if (frame === null) frame = window.requestAnimationFrame(updateVisibility)
+    }
+
+    function showOnPageLoad() {
+      previousY = scrollPosition()
+      setHidden(false)
+    }
+
+    // Let initial fragment navigation and restored scroll positions settle first.
+    const initialFrame = window.requestAnimationFrame(() => {
+      showOnPageLoad()
+      window.addEventListener('scroll', handleScroll, { passive: true })
+    })
+    window.addEventListener('pageshow', showOnPageLoad)
+
+    return () => {
+      window.cancelAnimationFrame(initialFrame)
+      if (frame !== null) window.cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('pageshow', showOnPageLoad)
+    }
+  }, [])
+
+  return (
+    <header className={hidden ? "site-header site-header-hidden" : "site-header"}><div className="wrap header-row">
+      <a href="/" className="wordmark">Gunnar Wise<span className="accent">.</span></a>
+      <nav aria-label="Main navigation">{navigation.map(([href, label]) => <a href={href} key={href} aria-current={href === sectionPath ? (href === pathname ? 'page' : 'location') : undefined}>{label}</a>)}</nav>
+    </div></header>
+  )
+}
+
 function App() {
   const Page = page?.view
   return <>
     <a className="skip" href="#main">Skip to content</a>
-    <header className="site-header"><div className="wrap header-row">
-      <a href="/" className="wordmark">Gunnar Wise<span className="accent">.</span></a>
-      <nav aria-label="Main navigation">{navigation.map(([href, label]) => <a href={href} key={href} aria-current={href === sectionPath ? (href === pathname ? 'page' : 'location') : undefined}>{label}</a>)}</nav>
-    </div></header>
+    <SiteHeader />
     <main id="main">{Page ? <Page /> : project ? <ProjectDetail project={project} /> : <div className="wrap inner"><h1>Page not found</h1><ArrowLink to="/">Back to Home</ArrowLink></div>}</main>
     <footer><div className="wrap footer-row"><a href="/" className="wordmark">Gunnar Wise<span className="accent">.</span></a><ArrowLink to="/contact">Say hello</ArrowLink></div></footer>
   </>
