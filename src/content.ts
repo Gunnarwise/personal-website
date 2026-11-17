@@ -14,9 +14,10 @@ export const featured = [
     slug: 'pico-maze-solving-robot',
     photo: { src: 'home-electronics', alt: 'Wheeled maze robot with a breadboard, sensor, and colorful jumper wires' },
     title: 'Pico 2 Maze-Solving Robot',
-    summary: 'A wheeled robot that uses a servo-mounted ultrasonic sensor to navigate a maze.',
-    context: 'I built this robot for my Embedded Microprocessor Systems class. A Raspberry Pi Pico 2 controls the wheels and reads the sensor that tells it what’s in the way.',
-    approach: 'The Pico 2 drives the wheels through a motor driver and uses PWM to turn the servo that holds the ultrasonic sensor. It uses the sensor readings to check for obstacles and decide where to drive next.',
+    summary: 'A Raspberry Pi Pico 2-powered robot designed to autonomously navigate a maze using ultrasonic sensing, motor control, and obstacle detection.',
+    context: 'This project was developed for my Embedded Systems course at Arizona State University. The goal was to build a small autonomous robot capable of navigating a maze of cardboard walls without human intervention. Building on earlier projects involving motor control, wheel encoders, and PID controllers, this project introduced ultrasonic sensing and autonomous decision-making. The robot needed to detect obstacles, determine which directions were available, and navigate around walls to reach the end of the maze.',
+    approach: `I programmed the robot in C using the Raspberry Pi Pico SDK, combining several hardware components to control its movement and surroundings. An HC-SR04 ultrasonic sensor mounted on a servo motor allows the robot to scan forward, left, and right to detect obstacles and identify open paths. GPIO interrupts measure the ultrasonic sensor\'s echo pulses to calculate distances, while PWM signals control the motors and servo. \n
+                  \nFor navigation, I explored a state-machine approach that breaks the process into individual behaviors, such as driving forward, scanning for openings, turning, and following walls. `,
     medium: 'Embedded Microprocessor Systems · Raspberry Pi Pico 2 · C',
   },
   {
@@ -40,10 +41,26 @@ export const featured = [
 ]
 
 export const smallProjects = [
-  { title: 'Pico sensor logger', description: 'A Raspberry Pi Pico 2 design for sampling temperature and light and streaming readings over UART.' },
-  { title: 'Fashion-MNIST classification', description: 'Coursework exploring how neural networks classify grayscale images of clothing.' },
-  { title: 'Chain of custody verifier', description: 'A coursework demo of how a verifier reports corruption in an evidence chain.' },
-  { title: 'Logistic regression', description: 'A machine learning exercise on classification and decision boundaries.' },
+  {
+    title: 'Blockchain Chain of Custody',
+    description: 'A digital forensics project exploring how blockchain-based records can track evidence history and help detect unauthorized changes.',
+  },
+  {
+    title: 'AloWish',
+    description: "A computer science capstone project developing an accessible travel-planning platform that considers travelers' individual needs when providing recommendations.",
+  },
+  {
+    title: 'Monte Carlo Pi Estimator',
+    description: 'An interactive Python application that estimates π by generating random points inside a square and visualizing how many fall within an inscribed circle.',
+  },
+  {
+    title: 'YouTube Data Aggregator',
+    description: 'A Python application that uses the YouTube Data API to retrieve and organize video statistics, channel information, and metadata for analysis.',
+  },
+  {
+    title: 'Discussion Board Application',
+    description: 'A JavaFX discussion board backed by an H2 database, supporting user management, discussion posts, and replies.',
+  },
 ]
 
 export const contactLinks = [

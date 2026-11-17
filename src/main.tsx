@@ -98,10 +98,21 @@ function Projects() {
     <p className="intro">A look at what I’ve been building and learning.</p>
     <section className="ruled">
       <h2>Featured projects</h2>
-      {featured.map((project) => <div className="project-row" key={project.slug}>
-        {project.photo && <Photo {...project.photo} />}
-        <div><p className="eyebrow">{project.medium}</p><h3>{project.title}</h3><p>{project.summary}</p><ArrowLink to={`/projects/${project.slug}`}>More information</ArrowLink></div>
-      </div>)}
+      {featured.map((project) => {
+        const github = project.links?.find((link) => link.label === 'View on GitHub')
+        return <div className="project-row" key={project.slug}>
+          {project.photo && <Photo {...project.photo} />}
+          <div>
+            <p className="eyebrow">{project.medium}</p>
+            <h3>{project.title}</h3>
+            <p>{project.summary}</p>
+            <div className="actions project-actions">
+              <ArrowLink to={`/projects/${project.slug}`} primary>More information</ArrowLink>
+              {github && <ArrowLink to={github.href}>View on GitHub</ArrowLink>}
+            </div>
+          </div>
+        </div>
+      })}
     </section>
     <section className="ruled"><h2>Smaller projects</h2><div className="cards">{smallProjects.map((project) => <article key={project.title}><h3>{project.title}</h3><p>{project.description}</p></article>)}</div></section>
   </article>

@@ -91,6 +91,7 @@ h3 { font-size: clamp(1.2rem, 2.6vw, 1.95rem); line-height: 1.2; letter-spacing:
 .project-row .photo { flex: 0 0 min(36%, 330px); }
 .project-row .photo img { aspect-ratio: 1; object-position: center 56%; }
 .project-row .project-screenshot img { aspect-ratio: auto; }
+.project-actions { margin-top: 16px; }
 .project-row .eyebrow { margin: 0 0 .5rem; }
 .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
 .cards > * { background: var(--cream); border: 1px solid var(--line); padding: 24px; border-radius: 12px; }
