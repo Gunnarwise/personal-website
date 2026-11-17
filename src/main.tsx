@@ -217,22 +217,30 @@ function ClimbingGallery() {
   </div>
 }
 
-function GalleryViewer({ viewer, label, itemName, move, caption, onClose, children }: {
+function GalleryViewer({ viewer, label, itemName, move, caption, counter, onClose, children }: {
   viewer: React.RefObject<HTMLDialogElement | null>
   label: string
   itemName: string
   move?: (offset: number) => void
   caption?: string
+  counter?: string
   onClose?: () => void
   children: React.ReactNode
 }) {
-  return <dialog ref={viewer} aria-label={label} onClose={onClose} onKeyDown={(event) => {
+  return <dialog ref={viewer} aria-label={label} onClose={onClose} onClick={(event) => {
+    if (event.target !== event.currentTarget) return
+    const bounds = event.currentTarget.getBoundingClientRect()
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
+      event.currentTarget.close()
+    }
+  }} onKeyDown={(event) => {
     if (event.target instanceof HTMLVideoElement || !move) return
     if (event.key === 'ArrowLeft') move(-1)
     if (event.key === 'ArrowRight') move(1)
   }}>
     <div className="viewer-controls">
-      <button type="button" onClick={() => viewer.current?.close()} autoFocus>Close <span aria-hidden="true">×</span></button>
+      {counter && <span className="viewer-counter" aria-live="polite">{counter}</span>}
+      <button type="button" onClick={() => viewer.current?.close()} aria-label="Close slideshow" autoFocus><span aria-hidden="true">×</span></button>
     </div>
     {children}
     <div className="viewer-controls">
@@ -269,7 +277,7 @@ function Photography() {
   })
 
   function move(offset: number) {
-    setSelected((current) => (current + offset + visiblePhotos.length) % visiblePhotos.length)
+    setSelected((current) => (current + offset + photos.length) % photos.length)
   }
 
   function renderTile(photo: (typeof photos)[number], index: number) {
@@ -307,7 +315,7 @@ function Photography() {
         <span aria-hidden="true">{expanded ? '↑' : '↓'}</span>
       </button>
     )}
-    <GalleryViewer viewer={viewer} label="Photography viewer" itemName="photograph" move={move} caption={photos[selected].label}>
+    <GalleryViewer viewer={viewer} label="Photography viewer" itemName="photograph" move={move} caption={photos[selected].label} counter={`${selected + 1} of ${photos.length} photos`}>
       <img src={photos[selected].src} alt={photos[selected].label} loading="lazy" />
     </GalleryViewer>
   </>
@@ -380,7 +388,15 @@ function Life() {
     <h1>Life & Interests<span className="accent">.</span></h1>
     <p className="intro">A few things I enjoy away from the computer.</p>
     <section className="ruled hobby"><div><h2>Bouldering</h2><p>I got into climbing in the summer of 2023 and have been loving it ever since. I love how easy it is to see progress every session, and it's so fun always having another puzzle to solve!</p></div><ClimbingGallery /></section>
-    <section className="ruled" id="photography"><h2>Photography</h2><p>I got into photography when I took a photography class in 2024. I haven't taken much time to take a lot of pictures, but here are a few of my favorites.</p><p className="caption">Click on any image to enter a slideshow.</p><Photography /></section>
+    <section className="ruled" id="photography"><h2>Photography</h2><p>I got into photography when I took a photography class in 2024. I haven't taken much time to take a lot of pictures, but here are a few of my favorites.</p><p className="photography-instruction">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+        <path d="M4 7H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h12a1 1 0 0 0 1-1v-1" />
+        <rect x="6" y="2" width="16" height="16" rx="2" />
+        <circle cx="11" cy="7" r="1" />
+        <path d="m22 12-4-4-8 10" />
+      </svg>
+      <span>Click any photo to open the slideshow</span>
+    </p><Photography /></section>
     {/* Hidden for now. Uncomment to restore the sections below Photography.
     <OutAndAbout />
     <section className="ruled life-section">

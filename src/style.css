@@ -111,7 +111,8 @@ h3 { font-size: clamp(1.2rem, 2.6vw, 1.95rem); line-height: 1.2; letter-spacing:
 .gallery-controls { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 12px; }
 .gallery-controls > span { color: var(--muted); font-size: .78rem; font-weight: 800; white-space: nowrap; }
 .gallery-controls button, .viewer-controls button { min-width: 44px; min-height: 44px; padding: 6px 10px; background: var(--cream); border: 1px solid var(--line); border-radius: 8px; font-weight: 800; }
-.viewer-controls button:hover { background: var(--blush); }
+.viewer-controls button { background: var(--clay); color: #fff; border-color: transparent; }
+.viewer-controls button:hover { background: var(--link); }
 .photo-grid { display: flex; gap: 12px; }
 .photo-grid-column { display: flex; flex: 1 1 0; flex-direction: column; min-width: 0; }
 .photo-grid button { display: block; width: 100%; margin: 0 0 12px; border: 0; padding: 0; border-radius: 12px; overflow: hidden; background: var(--blush); }
@@ -119,10 +120,10 @@ h3 { font-size: clamp(1.2rem, 2.6vw, 1.95rem); line-height: 1.2; letter-spacing:
 .photo-grid-peek { position: relative; flex: 1; min-height: 76px; overflow: hidden; mask-image: linear-gradient(to bottom, #000 calc(100% - 76px), transparent); }
 .photo-grid-peek img { position: absolute; inset: 0; height: 100%; min-height: 120px; object-fit: cover; object-position: center 40%; border-radius: 12px; }
 .photo-grid-toggle { display: flex; border: 0; margin: 8px auto 0; }
-dialog { width: min(780px, calc(100% - 32px)); max-height: calc(100% - 32px); border: 1px solid var(--line); color: var(--ink); border-radius: 14px; background: var(--cream); padding: 14px; }
+dialog { width: min(1100px, calc(100% - 24px)); max-height: calc(100% - 24px); border: 1px solid var(--line); color: var(--ink); border-radius: 14px; background: var(--cream); padding: 8px; }
 dialog::backdrop { background: rgb(56 43 38 / 75%); }
-dialog img { height: min(65dvh, calc(100dvh - 178px)); object-fit: contain; margin-block: 8px; }
-.viewer-controls:last-child { min-height: 54px; }
+dialog img, dialog video { height: calc(100dvh - 144px); max-height: 82dvh; object-fit: contain; margin-block: 4px; }
+.viewer-controls:last-child { min-height: 44px; }
 .viewer-controls:last-child button { flex: 0 0 44px; }
 .viewer-controls:last-child span { font-size: .9rem; line-height: 1.2; text-align: center; }
 .viewer-controls:first-child { justify-content: flex-end; }
@@ -172,3 +173,8 @@ footer { border-top: 1px solid var(--line); }
 
 .gallery-controls button { background: var(--clay); color: #fff; border-color: transparent; font-size: .8rem; }
 .gallery-controls button:hover { background: var(--link); }
+
+.photography-instruction { display: flex; align-items: center; gap: 8px; margin: 20px 0 16px; color: var(--ink); font-size: 1rem; font-weight: 500; line-height: 1.5; }
+.photography-instruction svg { flex: 0 0 20px; color: var(--clay); }
+
+.viewer-counter { margin-right: auto; font-size: .9rem; font-weight: 500; }
