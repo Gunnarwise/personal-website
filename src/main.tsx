@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { contactLinks, featured, photos, smallProjects } from './content'
+import { contactLinks, featured, moments, otherInterests, photos, smallProjects } from './content'
 import '@fontsource-variable/manrope'
 import './style.css'
 
@@ -107,7 +107,8 @@ function Projects() {
             <h3>{project.title}</h3>
             <p>{project.summary}</p>
             <div className="actions project-actions">
-              <ArrowLink to={`/projects/${project.slug}`} primary>More information</ArrowLink>
+              <ArrowLink to={`/projects/${project.slug}`} primary>Project details</ArrowLink>
+              {project.game && <ArrowLink to={`/projects/${project.slug}#play`}>Play on this site</ArrowLink>}
               {github && <ArrowLink to={github.href}>View on GitHub</ArrowLink>}
             </div>
           </div>
@@ -124,6 +125,11 @@ function GamePlayer({ title, src, width, height }: { title: string; src: string;
   const [muted, setMuted] = useState(false)
   const player = useRef<HTMLIFrameElement>(null)
   const frame = useRef<HTMLDivElement>(null)
+  const playSection = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (window.location.hash === '#play') playSection.current?.scrollIntoView()
+  }, [])
 
   useEffect(() => {
     const container = frame.current
@@ -139,7 +145,7 @@ function GamePlayer({ title, src, width, height }: { title: string; src: string;
     player.current?.contentWindow?.postMessage({ type: 'crossy-street-mute', muted: value }, window.location.origin)
   }
 
-  return <section className="ruled">
+  return <section className="ruled" id="play" ref={playSection}>
     <h2>Play {title}</h2>
     <p>Use WASD to move. Click inside the game to enable keyboard controls and sound.</p>
     {playing && <button type="button" className="button game-mute" onClick={() => {
@@ -211,6 +217,32 @@ function ClimbingGallery() {
   </div>
 }
 
+function GalleryViewer({ viewer, label, itemName, move, caption, onClose, children }: {
+  viewer: React.RefObject<HTMLDialogElement | null>
+  label: string
+  itemName: string
+  move?: (offset: number) => void
+  caption?: string
+  onClose?: () => void
+  children: React.ReactNode
+}) {
+  return <dialog ref={viewer} aria-label={label} onClose={onClose} onKeyDown={(event) => {
+    if (event.target instanceof HTMLVideoElement || !move) return
+    if (event.key === 'ArrowLeft') move(-1)
+    if (event.key === 'ArrowRight') move(1)
+  }}>
+    <div className="viewer-controls">
+      <button type="button" onClick={() => viewer.current?.close()} autoFocus>Close <span aria-hidden="true">×</span></button>
+    </div>
+    {children}
+    <div className="viewer-controls">
+      {move && <button type="button" aria-label={`Previous ${itemName}`} onClick={() => move(-1)}>←</button>}
+      <span aria-live="polite">{caption}</span>
+      {move && <button type="button" aria-label={`Next ${itemName}`} onClick={() => move(1)}>→</button>}
+    </div>
+  </dialog>
+}
+
 function Photography() {
   const [selected, setSelected] = useState(0)
   const [expanded, setExpanded] = useState(false)
@@ -275,19 +307,72 @@ function Photography() {
         <span aria-hidden="true">{expanded ? '↑' : '↓'}</span>
       </button>
     )}
-    <dialog ref={viewer} aria-label="Photography viewer" onKeyDown={(event) => {
-      if (event.key === 'ArrowLeft') move(-1)
-      if (event.key === 'ArrowRight') move(1)
-    }}>
-      <div className="viewer-controls"><button onClick={() => viewer.current?.close()} autoFocus>Close <span aria-hidden="true">×</span></button></div>
+    <GalleryViewer viewer={viewer} label="Photography viewer" itemName="photograph" move={move} caption={photos[selected].label}>
       <img src={photos[selected].src} alt={photos[selected].label} loading="lazy" />
-      <div className="viewer-controls">
-        <button aria-label="Previous photograph" onClick={() => move(-1)}>←</button>
-        <span aria-live="polite">{photos[selected].label}</span>
-        <button aria-label="Next photograph" onClick={() => move(1)}>→</button>
-      </div>
-    </dialog>
+    </GalleryViewer>
   </>
+}
+
+function MomentPlaceholder({ name, type }: { name: string; type: 'image' | 'video' }) {
+  return <span className="moment-placeholder">
+    <span>{type === 'image' ? 'Photo placeholder' : 'Video preview'}</span>
+    <strong>{name}</strong>
+  </span>
+}
+
+function OutAndAbout() {
+  const previewCount = 6
+  const [expanded, setExpanded] = useState(false)
+  const [selected, setSelected] = useState<number | null>(null)
+  const viewer = useRef<HTMLDialogElement>(null)
+  const visibleMoments = expanded ? moments : moments.slice(0, previewCount)
+  const active = selected === null ? undefined : visibleMoments[selected]
+
+  function move(offset: number) {
+    setSelected((current) => current === null ? null : (current + offset + visibleMoments.length) % visibleMoments.length)
+  }
+
+  return <section className="ruled life-section" id="out-and-about" aria-labelledby="out-and-about-heading">
+    <h2 id="out-and-about-heading">Out & About</h2>
+    <p>A collection of adventures, places I've explored, and moments I've wanted to remember. From hiking and wakeboarding to traveling somewhere new, here are a few glimpses of what I've been up to.</p>
+    <div className="moments-grid" id="moments-grid">
+      {visibleMoments.map((moment, index) => {
+        const preview = moment.type === 'video' ? moment.poster : moment.src
+        return <button
+          key={`${moment.src ?? moment.alt}-${index}`}
+          type="button"
+          className={moment.orientation === 'portrait' ? 'moment-tile portrait-moment' : 'moment-tile'}
+          aria-label={`Open ${moment.type === 'video' ? 'video' : moment.src ? 'photo' : 'photo placeholder'}: ${moment.alt}`}
+          onClick={() => {
+            setSelected(index)
+            viewer.current?.showModal()
+          }}
+        >
+          {preview
+            ? <img src={preview} alt={moment.alt} loading="lazy" decoding="async" />
+            : <MomentPlaceholder name={moment.alt} type={moment.type} />}
+          {moment.type === 'video' && preview && <span className="moment-video-label" aria-hidden="true">▶ Video</span>}
+        </button>
+      })}
+    </div>
+    {moments.length > previewCount && (
+      <button type="button" className="button primary photo-grid-toggle moments-toggle"
+        aria-expanded={expanded} aria-controls="moments-grid" onClick={() => setExpanded(!expanded)}>
+        {expanded ? 'Show Fewer Moments' : 'Show More Moments'}
+        <span aria-hidden="true">{expanded ? '↑' : '↓'}</span>
+      </button>
+    )}
+    <GalleryViewer viewer={viewer} label="Out & About viewer" itemName="moment"
+      move={visibleMoments.length > 1 ? move : undefined} caption={active?.caption} onClose={() => setSelected(null)}>
+      {active && <div className="moment-viewer-media" key={selected}>
+        {!active.src
+          ? <MomentPlaceholder name={active.alt} type={active.type} />
+          : active.type === 'video'
+            ? <video src={active.src} poster={active.poster} aria-label={active.alt} controls playsInline preload="metadata" />
+            : <img src={active.src} alt={active.alt} />}
+      </div>}
+    </GalleryViewer>
+  </section>
 }
 
 function Life() {
@@ -296,7 +381,20 @@ function Life() {
     <p className="intro">A few things I enjoy away from the computer.</p>
     <section className="ruled hobby"><div><h2>Bouldering</h2><p>I got into climbing in the summer of 2023 and have been loving it ever since. I love how easy it is to see progress every session, and it's so fun always having another puzzle to solve!</p></div><ClimbingGallery /></section>
     <section className="ruled" id="photography"><h2>Photography</h2><p>I got into photography when I took a photography class in 2024. I haven't taken much time to take a lot of pictures, but here are a few of my favorites.</p><p className="caption">Click on any image to enter a slideshow.</p><Photography /></section>
-    <div className="cards"><section><h2>Adventure stories</h2><p>Stories and photos from trips will go here as I choose what to share.</p></section><section><h2>Currently learning</h2><p>Practicing music and making time for more photography.</p></section></div>
+    {/* Hidden for now. Uncomment to restore the sections below Photography.
+    <OutAndAbout />
+    <section className="ruled life-section">
+      <h2>A Few Other Interests</h2>
+      <div className="other-interests">
+        {otherInterests.map(({ title, description }) => (
+          <article key={title}>
+            <h3>{title}</h3>
+            <p>{description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    */}
   </article>
 }
 

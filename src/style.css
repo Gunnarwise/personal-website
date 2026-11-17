@@ -121,6 +121,24 @@ dialog img { height: min(65dvh, calc(100dvh - 178px)); object-fit: contain; marg
 .viewer-controls:last-child button { flex: 0 0 44px; }
 .viewer-controls:last-child span { font-size: .9rem; line-height: 1.2; text-align: center; }
 .viewer-controls:first-child { justify-content: flex-end; }
+.life-section { margin-top: clamp(44px, 7vw, 80px); padding-top: clamp(28px, 4vw, 44px); }
+.life-section > p, .other-interests p { max-width: 66ch; }
+.moments-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.moment-tile { position: relative; grid-column: span 2; height: clamp(150px, 27vw, 290px); overflow: hidden; border: 0; border-radius: 12px; padding: 0; background: var(--blush); }
+.moment-tile.portrait-moment { grid-column: span 1; background: var(--line); }
+.moment-tile:hover { box-shadow: 0 0 0 2px var(--clay); }
+.moment-tile img { height: 100%; object-fit: cover; }
+.moment-placeholder { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: 100%; height: 100%; padding: 12px; text-align: center; }
+.moment-placeholder > span { color: var(--muted); font-size: .75rem; }
+.moment-placeholder strong { font-size: clamp(.9rem, 2vw, 1.25rem); }
+.moment-video-label { position: absolute; bottom: 10px; right: 10px; border-radius: 6px; padding: 4px 8px; background: var(--cream); font-weight: 800; }
+.moments-toggle { margin-top: 18px; }
+.moment-viewer-media { height: min(65dvh, calc(100dvh - 178px)); margin-block: 8px; background: var(--sand); border-radius: 8px; overflow: hidden; }
+.moment-viewer-media img, .moment-viewer-media video { height: 100%; margin: 0; object-fit: contain; }
+.moment-viewer-media video { background: var(--ink); }
+.other-interests { margin-top: 22px; }
+.other-interests h3 { font-size: 1.2rem; }
+.other-interests article + article { margin-top: 24px; }
 footer { border-top: 1px solid var(--line); }
 .explore + footer { border-top: 0; }
 @media (max-width: 760px) {
@@ -137,6 +155,9 @@ footer { border-top: 1px solid var(--line); }
   .about-grid .photo { max-width: 400px; }
 }
 @media (max-width: 480px) {
+  .moments-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .moment-tile { grid-column: span 1; height: auto; aspect-ratio: 4 / 3; }
+  .moment-tile.portrait-moment { aspect-ratio: 4 / 3; }
   .about-outdoor-photos { grid-template-columns: 1fr; }
   .cards { grid-template-columns: 1fr; }
   .small-preview, .project-row { flex-direction: column; align-items: flex-start; gap: 12px; }

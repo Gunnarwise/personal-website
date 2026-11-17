@@ -90,3 +90,30 @@ export const photos = [
   { src: '/media/photography/boat-and-lighthouse.jpg', thumb: '/media/photography/boat-and-lighthouse-thumb.jpg', width: 540, height: 720, label: 'Nice lighthouse in Bandon, Oregon' },
   { src: '/media/photography/coastal-sea-stack.jpg', thumb: '/media/photography/coastal-sea-stack-thumb.jpg', width: 540, height: 720, label: 'The Oregon Coast famous "Face Rock", if you look closely you can see a womans head rising out of the ocean. ' },
 ]
+
+type Moment = {
+  type: 'image' | 'video'
+  src: string | null
+  alt: string
+  caption?: string
+  orientation?: 'portrait' | 'landscape'
+  poster?: string
+}
+
+export const moments: Moment[] = [
+  { type: 'image', src: null, alt: 'Hiking', caption: 'Placeholder for a hiking photo.' },
+  { type: 'image', src: null, alt: 'Wakeboarding', orientation: 'portrait', caption: 'Placeholder for a wakeboarding photo.' },
+  { type: 'image', src: null, alt: 'Weekend outing', orientation: 'portrait' },
+  { type: 'image', src: null, alt: 'Travel', caption: 'Placeholder for a photo from a trip.' },
+  { type: 'image', src: null, alt: 'Road trip' },
+  { type: 'image', src: null, alt: 'Day on the water', orientation: 'portrait' },
+  { type: 'image', src: null, alt: 'Scenic stop', orientation: 'portrait' },
+  { type: 'image', src: null, alt: 'Exploring somewhere new' },
+]
+
+export const otherInterests = [
+  {
+    title: 'Drumming',
+    description: "I've recently been getting into drumming. It's something completely different from my other hobbies, and I've enjoyed the challenge of learning an instrument and gradually getting better at it.",
+  },
+]
