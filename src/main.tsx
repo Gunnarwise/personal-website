@@ -45,7 +45,14 @@ function Home() {
         <Photo src="home-summit" alt="A hiker with outstretched arms on a rocky summit overlooking the city" className="summit-photo" />
         <div><h3>Things I enjoy</h3><p>Bouldering, photography, drumming, and a reason to get outside.</p><ArrowLink to="/life">Explore My Life & Interests</ArrowLink></div>
       </div>
-      <div className="small-preview"><div><h3>A bit more about me</h3><p>My background, education, and experience.</p></div><ArrowLink to="/about">Read About Me</ArrowLink></div>
+      <section className="home-closing" aria-labelledby="home-closing-heading">
+        <h3 id="home-closing-heading">There's more to the story.</h3>
+        <p>This site is a little look into what I build, what I enjoy, and what I'm curious about. If you'd like to know more about my background or how I got here, I've shared more on my About page.</p>
+        <div className="actions">
+          <a className="button primary" href="/about">More about me <span aria-hidden="true">→</span></a>
+          <a className="text-link" href="/contact">Say hello <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
     </div></section>
   </>
 }
