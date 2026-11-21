@@ -425,8 +425,8 @@ function Contact() {
   const [email, ...otherLinks] = contactLinks
 
   return <article className="wrap inner contact">
-    <h1>Say hello<span className="accent">.</span></h1>
-    <p className="intro">Have a project in mind, want to talk about work, or just feel like saying hi? I’d love to hear from you.</p>
+    <h1>Lets Connect<span className="accent">.</span></h1>
+    <p className="intro">Whether you're reaching out about a project, a shared interest, or just to say hello, I'd love to hear from you.</p>
     <a className="contact-email" href={email.href}>{email.detail}</a>
     <ul className="contact-links" aria-label="Other ways to reach me">
       {otherLinks.map(({ label, detail, href }) => (
