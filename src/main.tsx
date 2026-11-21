@@ -30,7 +30,6 @@ function Home() {
         <p className="eyebrow">Computer science · Arizona State University</p>
         <h1>Hey, I’m<br />Gunnar<span className="accent">.</span></h1>
         <p className="intro">I’m a computer science student at Arizona State Univeristy. I like building software, working on hands-on projects, and finding new things to learn.</p>
-        <p>Outside of software development, I like to spend time bouldering, traveling, and practicing the drums.</p>
         <div className="actions"><ArrowLink to="/about" primary>Get to know me</ArrowLink><ArrowLink to="/projects">See my projects</ArrowLink><a className="text-link" href="/gunnar-wise-resume.pdf" target="_blank" rel="noopener noreferrer">View my resume<span aria-hidden="true">›</span></a></div>
       </div>
       <Photo src="portrait" alt="Gunnar Wise crouching on a steel railway bridge" className="hero-photo" eager />
