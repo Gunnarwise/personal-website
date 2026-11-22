@@ -61,6 +61,10 @@ export const smallProjects = [
     title: 'Discussion Board Application',
     description: 'A JavaFX discussion board backed by an H2 database, supporting user management, discussion posts, and replies.',
   },
+  {
+    title: 'Personal Website',
+    description: 'The website you\'re currently exploring! Built with React and TypeScript to showcase my projects, share my personal interests, and give people a better sense of who I am.',
+  }
 ]
 
 export const contactLinks = [
