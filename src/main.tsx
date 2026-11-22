@@ -1,8 +1,10 @@
-import { StrictMode, useEffect, useRef, useState } from 'react'
+import { StrictMode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { contactLinks, featured, moments, otherInterests, photos, smallProjects } from './content'
+import { createPortal } from 'react-dom'
+import { contactLinks, featured, moments, otherInterests, photos, randomFacts, smallProjects } from './content'
 import '@fontsource-variable/manrope'
 import './style.css'
+import { selectRandomFact } from './randomFact'
 
 const navigation = [
   ['/', 'Home'], ['/about', 'About Me'], ['/projects', 'Projects'],
@@ -23,12 +25,75 @@ function Photo({ src, label, alt = '', className = '', eager = false }: { src: s
   return <figure className={`photo ${className}`}><img src={`/media/${src}.jpg`} alt={alt} loading={eager ? 'eager' : 'lazy'} />{label && <figcaption>{label}</figcaption>}</figure>
 }
 
+function FactText({ text }: { text: string }) {
+  return <>{text.split(/(https?:\/\/[^\s]+)/g).map((part, index) =>
+    /^https?:\/\//.test(part)
+      ? <a key={index} href={part} target="_blank" rel="noopener noreferrer">{part}</a>
+      : part,
+  )}</>
+}
+
+function RandomFactPeriod() {
+  const trigger = useRef<HTMLButtonElement>(null)
+  const popover = useRef<HTMLDivElement>(null)
+  const recentFacts = useRef<number[]>([])
+  const [fact, setFact] = useState(0)
+  const [open, setOpen] = useState(false)
+
+  function anotherFact() {
+    const selection = selectRandomFact(randomFacts.length, recentFacts.current)
+    if (!selection) return
+    recentFacts.current = selection.recent
+    setFact(selection.index)
+  }
+
+  useLayoutEffect(() => {
+    if (!open) return
+    function position() {
+      if (!trigger.current || !popover.current) return
+      const anchor = trigger.current.getBoundingClientRect()
+      const panel = popover.current.getBoundingClientRect()
+      const inset = 16
+      const fitsBeside = anchor.right + 12 + panel.width <= window.innerWidth - inset
+      const left = fitsBeside ? anchor.right + 12 : Math.max(inset, Math.min(anchor.left, window.innerWidth - panel.width - inset))
+      const preferredTop = fitsBeside ? anchor.bottom - panel.height : anchor.bottom + 12
+      const top = Math.max(inset, Math.min(preferredTop, window.innerHeight - panel.height - inset))
+      popover.current.style.left = `${left}px`
+      popover.current.style.top = `${top}px`
+    }
+    position()
+    window.addEventListener('resize', position)
+    window.addEventListener('scroll', position, { passive: true })
+    return () => {
+      window.removeEventListener('resize', position)
+      window.removeEventListener('scroll', position)
+    }
+  }, [open, fact])
+
+  return <>
+    <button ref={trigger} type="button" className="hero-period accent" aria-label="Show a random fact about Gunnar" aria-expanded={open} aria-controls="hero-random-fact" popoverTarget="hero-random-fact" popoverTargetAction="show" onClick={anotherFact}><span aria-hidden="true">.</span></button>
+    {createPortal(<div ref={popover} id="hero-random-fact" className="random-fact" popover="auto" role="dialog" aria-labelledby="random-fact-heading" onToggle={(event) => setOpen(event.newState === 'open')}>
+      <div className="random-fact-header">
+        <h2 id="random-fact-heading">Since you're curious</h2>
+        <button type="button" className="random-fact-close" autoFocus aria-label="Close random fact" onClick={() => popover.current?.hidePopover()}><span aria-hidden="true">×</span></button>
+      </div>
+      <div className="random-fact-body">
+        <p aria-live="polite"><FactText text={randomFacts[fact]} /></p>
+        <div className="random-fact-sizing" aria-hidden="true">
+          {randomFacts.map((text) => <p key={text}><FactText text={text} /></p>)}
+        </div>
+      </div>
+      <p className="random-fact-hint">Click again for another fact!</p>
+    </div>, document.body)}
+  </>
+}
+
 function Home() {
   return <>
     <section className="hero wrap">
       <div className="hero-copy">
         <p className="eyebrow">Computer science · Arizona State University</p>
-        <h1>Hey, I’m<br />Gunnar<span className="accent">.</span></h1>
+        <h1>Hey, I’m<br />Gunnar<RandomFactPeriod /></h1>
         <p className="intro">I’m a computer science student at Arizona State Univeristy. I like building software, working on hands-on projects, and finding new things to learn.</p>
         <div className="actions"><ArrowLink to="/about" primary>Get to know me</ArrowLink><ArrowLink to="/projects">See my projects</ArrowLink><a className="text-link" href="/gunnar-wise-resume.pdf" target="_blank" rel="noopener noreferrer">View my resume<span aria-hidden="true">›</span></a></div>
       </div>

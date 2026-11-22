@@ -117,3 +117,24 @@ export const otherInterests = [
     description: "I've recently been getting into drumming. It's something completely different from my other hobbies, and I've enjoyed the challenge of learning an instrument and gradually getting better at it.",
   },
 ]
+
+// Edit this list to change the homepage period's random facts.
+export const randomFacts = [
+  "I recently started learning how to play the drums",
+  "I can solve a rubix cube in 30 seconds",
+  "I can juggle 3, 4, and almost 5 balls",
+  "I made it to high school swimming finals and placed 6th, 6th, 7th, and 12th in my four events",
+  "I competed in the decathalon in track and field",
+  "I built my own version of crossy road, you can play it on this website",
+  "I got a second degree blackbelt in Taekwondo",
+  "My favorite color is orange",
+  "I like photography, but my dream is to get good enough equipment for astrophotography",
+  "I'm hosting this website on Cloudflare",
+  "heres the source code to this website: https://github.com/Gunnarwise/personal-website",
+  "My favorite math class I have taken was discrete math",
+  "I grew up in the same house my whole life",
+  "I started coding in 2019 and since then I have used 21 different programming languages",
+  "I can type ~90-100 words per minute",
+  "As of November 2026, I have been to 21 states and 2 countries (US and Mexico)",
+  "A few countries at the top of my list to visit: Japan, Greece, Switzerland, Norway",
+]
